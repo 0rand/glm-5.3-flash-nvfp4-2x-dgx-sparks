@@ -79,6 +79,9 @@ ctx interacts badly with unified memory (vLLM #48140 reads `MemFree`).
 If KV sizing looks wrong or the boot OOMs, re-add the pin as the first
 suspect.
 
+
+## CHANGE LOG
+--> Enabled Vision tower, disabled MM profiling, limited MM to 4 images and 1 video, updated batch size to 1024 for quality output
 ## Why each non-obvious knob exists (each proven by a boot that died without it)
 
 - `--enforce-eager` — MTP + CUDA graphs silently costs ~3 quality points
