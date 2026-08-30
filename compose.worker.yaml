@@ -110,12 +110,14 @@ services:
           --gpu-memory-utilization "$${GPU_MEM}" \
           --kv-cache-dtype fp8_ds_mla --block-size 256 \
           --max-model-len "$${MAX_MODEL_LEN}" \
+          --skip-mm-profiling  \
+          --limit-mm-per-prompt '{"image": 4, "video": {"count": 1, "num_frames": 32, "width": 512, "height": 512}}' \
           --max-num-seqs "$${MAX_NUM_SEQS}" \
           --max-num-batched-tokens "$${MAX_NUM_BATCHED_TOKENS}" \
           --enable-chunked-prefill --async-scheduling --enable-prefix-caching \
           --disable-custom-all-reduce \
           --kernel-config '{"enable_cutedsl_warmup":false,"enable_flashinfer_autotune":false}' \
           --speculative-config '{"method":"mtp","num_speculative_tokens":${MTP_TOKENS}}' \
-          --language-model-only --enforce-eager \
+          --enforce-eager \
           --tool-call-parser glm47 --enable-auto-tool-choice --reasoning-parser glm45 \
           $${SERVE_NET}
