@@ -89,12 +89,12 @@ if ssh "$WORKER_SSH_TARGET" "[ -d $HF_CACHE/$REPO_DIR ]"; then
     echo "  worker: $WORKER_BLOBS blobs — matches, skipping"
   else
     echo "  worker: $WORKER_BLOBS blobs (head has $HEAD_BLOBS) — syncing..."
-    rsync -a --info=progress2 "$HF_CACHE/$REPO_DIR" "$WORKER_ROCE_SSH_TARGET:$HF_CACHE/$REPO_DIR"
+    rsync -a --info=progress2 "$HF_CACHE/$REPO_DIR/" "$WORKER_ROCE_SSH_TARGET:$HF_CACHE/$REPO_DIR/"
   fi
 else
   echo "  worker: missing — syncing (~186 GB over RoCE)..."
   ssh "$WORKER_ROCE_SSH_TARGET" "mkdir -p $HF_CACHE"
-  rsync -a --info=progress2 "$HF_CACHE/$REPO_DIR" "$WORKER_ROCE_SSH_TARGET:$HF_CACHE/$REPO_DIR"
+  rsync -a --info=progress2 "$HF_CACHE/$REPO_DIR/" "$WORKER_ROCE_SSH_TARGET:$HF_CACHE/$REPO_DIR/"
 fi
 WORKER_BLOBS=$(ssh "$WORKER_SSH_TARGET" "ls $HF_CACHE/$REPO_DIR/blobs 2>/dev/null | wc -l")
 [ "$WORKER_BLOBS" = "$HEAD_BLOBS" ] || { echo "FATAL: blob count mismatch after sync"; exit 1; }
