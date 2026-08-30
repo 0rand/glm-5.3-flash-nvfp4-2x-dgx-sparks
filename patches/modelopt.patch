@@ -1,0 +1,39 @@
+--- a/vllm/modelopt.py
++++ b/vllm/modelopt.py
+@@ -2356,6 +2356,22 @@
+     def _quantized_layer_prefix_candidates(prefix: str) -> tuple[str, ...]:
+         candidates = [prefix]
+ 
++        # MTP draft naming (see nvfp4 stand-up notes): strip mtp_block,
++        # then re-root over every naming the shared quantized_layers dict
++        # can be in - checkpoint form (model.language_model.*) or the
++        # target-tree form its mapper rewrites to (language_model.model.*).
++        _bases = {prefix, prefix.replace(".mtp_block.", ".")}
++        for _b in list(_bases):
++            for _root in ("model.", "model.language_model.", "language_model.model."):
++                if _b.startswith(_root):
++                    _bases.add(_b[len(_root) :])
++        for _b in list(_bases):
++            if _b.startswith("layers."):
++                _bases.add("model." + _b)
++                _bases.add("model.language_model." + _b)
++                _bases.add("language_model.model." + _b)
++        candidates.extend(_bases - {prefix})
++
+         if prefix.endswith(".lm_head"):
+             candidates.append("lm_head")
+ 
+@@ -2387,6 +2403,13 @@
+             return None
+ 
+         quant_algo = self._resolve_quant_algo(prefix)
++        import sys as _sys
++        print(
++            "[quantprobe] layer=%s prefix=%s algo=%s"
++            % (type(layer).__name__, prefix, quant_algo),
++            file=_sys.stderr,
++            flush=True,
++        )
+ 
+         if isinstance(layer, (LinearBase, ParallelLMHead)):
+             if quant_algo == "FP8":
