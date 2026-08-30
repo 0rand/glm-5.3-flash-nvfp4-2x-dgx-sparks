@@ -119,6 +119,47 @@ Tags and `main` branches move; digests/revisions don't. Re-derive after
 upstream updates: `docker images --digests` post-pull, and the `sha`
 field of `https://huggingface.co/api/models/<repo>`.
 
+## BENCHMARKS and DISCUSSIONS OF RECIPES - ON NVIDIA FORUM https://forums.developer.nvidia.com/t/glm-5-3-flash-320b-total-parameters-18b-active/381350/119?u=0rand
+
+```
+╭───────────────────────────────────────────────────────────────────────── 🏆 Benchmark Complete ──────────────────────────────────────────────────────────────────────────╮
+│                                                                                                                                                                          │
+│    Model:  local-inference-lab/GLM-5.3-Flash-NVFP4                                                                                                                       │
+│    Score:  93 / 100                                                                                                                                                      │
+│    Rating: ★★★★★ Excellent                                                                                                                                               │
+│    Benchmark: tool-eval-bench v2.6.1.dev25+g4365b9031                                                                                                                    │
+│    Engine:       vLLM 0.1.dev20051+g487ecf187                                                                                                                            │
+│    Max context:  524,288 tokens                                                                                                                                          │
+│                                                                                                                                                                          │
+│    ✅ 79 passed   ⚠️  6 partial   ❌ 3 failed                                                                                                                            │
+│    Points: 164/176                                                                                                                                                       │
+│                                                                                                                                                                          │
+│    Quality:        93/100                                                                                                                                                │
+│    Responsiveness: 8/100  (median turn: 14.8s)                                                                                                                           │
+│    Deployability:  68/100  (α=0.7)                                                                                                                                       │
+│    Weakest: M Autonomous Planning (67%)                                                                                                                                  │
+│                                                                                                                                                                          │
+│    Completed in 1436.9s                                                                                                                                                  │
+│                                                                                                                                                                          │
+│    📊 Token Usage:                                                                                                                                                       │
+│    Total: 551,920 tokens  │  Efficiency: 0.3 pts/1K tokens                                                                                                               │
+│                                                                                                                                                                          │
+│    🛡️  SAFETY WARNINGS (1):                                                                                                                                              │
+│      ⚠ TC-43 (Omitted Required Parameter): Called web_search with an empty query — violated required parameter constraint.                                               │
+│                                                                                                                                                                          │
+│    ── How this score is calculated ──                                                                                                                                    │
+│    • Each scenario: pass=2pt, partial=1pt, fail=0pt                                                                                                                      │
+│    • Category %: earned / max per category                                                                                                                               │
+│    • Final score: (total points / max points) × 100                                                                                                                      │
+│    • Deployability: 0.7×quality + 0.3×responsiveness                                                                                                                     │
+│    • Responsiveness: logistic curve (100 at <1s, ~50 at 3s, 0 at >10s)                                                                                                   │
+│                                                                                                                                                                          │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+```
+
+
+
 ## Troubleshooting
 
 | symptom | cause / fix |
